@@ -1,15 +1,65 @@
 package com.youdao.test.ui.activity;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.widget.RadioGroup;
 
 import com.youdao.test.R;
+import com.youdao.test.base.BaseMvpActivity;
+import com.youdao.test.presenter.MainPresenter;
+import com.youdao.test.presenter.contract.MainContract;
+import com.youdao.test.ui.fragemnt.FragmentController;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.BindView;
+
+public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainContract.View {
+
+    @BindView(R.id.rg_main_tab)
+    RadioGroup mFooterTab;
+
+    private FragmentController mFragmentController;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int getLayout() {
+        return R.layout.activity_main;
     }
+
+    @Override
+    protected void initEventAndaData() {
+        mFragmentController = new FragmentController(this, R.id.fl_main_content);
+        mFooterTab.setOnCheckedChangeListener(new MainCheckedChangeListener());
+        mFragmentController.showFragment(FragmentController.MAIN_FRAGMENT_TAB);
+
+    }
+
+    @Override
+    protected MainPresenter initPresenter() {
+        return new MainPresenter();
+    }
+
+    private class MainCheckedChangeListener implements RadioGroup.OnCheckedChangeListener {
+
+
+        @Override
+        public void onCheckedChanged(RadioGroup radioGroup, @IdRes int checkedId) {
+            switch (checkedId) {
+                case R.id.rb_main_first:
+                    mFragmentController.showFragment(FragmentController.MAIN_FRAGMENT_TAB);
+                    break;
+                case R.id.rb_main_video:
+                    mFragmentController.showFragment(FragmentController.VIDEO_FRAGMENT_TAB);
+                    break;
+                case R.id.rb_main_min_top:
+                    mFragmentController.showFragment(FragmentController.MIN_TOP_FRAGMENT_TAB);
+                    break;
+                case R.id.rb_main_mine:
+                    mFragmentController.showFragment(FragmentController.MINE_FRAGMENT_TAB);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    ;
+
 }

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">YoudDaoTest</string>
+    <string name="home_page">首页</string>
+    <string name="video">视频</string>
+    <string name="min_top">微头条</string>
+    <string name="mine">我的</string>
+    <string name="main_search_hint">搜你想搜的</string>
+
 </resources>
