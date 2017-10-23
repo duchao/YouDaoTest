@@ -1,11 +1,18 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <!--//沉浸式状态栏-->
+        <!--<item name="android:windowIsTranslucent" tools:targetApi="kitkat">true</item>-->
+        <!--<item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>-->
+
+        <!--// Actionbar Drawer Toggle 设置颜色-->
+        <!--<item name="android:colorControlNormal" tools:targetApi="lollipop">@color/white</item>-->
     </style>
 
     <style name="RadioButtonStyle">

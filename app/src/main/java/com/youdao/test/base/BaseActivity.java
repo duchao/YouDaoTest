@@ -73,4 +73,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         Intent intent = new Intent(mContext, tarActivity);
         startActivity(intent);
     }
+
 }

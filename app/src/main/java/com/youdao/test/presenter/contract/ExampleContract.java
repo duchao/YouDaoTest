@@ -7,7 +7,7 @@ import com.youdao.test.base.BaseView;
  * Created by duchao on 2017/10/22.
  */
 
-public interface MainContract {
+public interface ExampleContract {
     public interface View extends BaseView {
 
     }

@@ -1,20 +1,22 @@
 package com.youdao.test.ui.activity;
 
 import android.support.annotation.IdRes;
+import android.support.v7.widget.Toolbar;
 import android.widget.RadioGroup;
 
 import com.youdao.test.R;
-import com.youdao.test.base.BaseMvpActivity;
-import com.youdao.test.presenter.MainPresenter;
-import com.youdao.test.presenter.contract.MainContract;
+import com.youdao.test.base.BaseActivity;
 import com.youdao.test.ui.fragemnt.FragmentController;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainContract.View {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.rg_main_tab)
     RadioGroup mFooterTab;
+
+//    @BindView(R.id.toolbar)
+//    Toolbar mToolbar;
 
     private FragmentController mFragmentController;
 
@@ -25,15 +27,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
 
     @Override
     protected void initEventAndaData() {
+//        setToolbar(mToolbar, R.string.app_name);
         mFragmentController = new FragmentController(this, R.id.fl_main_content);
         mFooterTab.setOnCheckedChangeListener(new MainCheckedChangeListener());
         mFragmentController.showFragment(FragmentController.MAIN_FRAGMENT_TAB);
 
-    }
-
-    @Override
-    protected MainPresenter initPresenter() {
-        return new MainPresenter();
     }
 
     private class MainCheckedChangeListener implements RadioGroup.OnCheckedChangeListener {
