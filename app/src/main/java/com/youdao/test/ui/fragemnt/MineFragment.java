@@ -18,6 +18,12 @@ public class MineFragment extends BaseFragment {
 
     @Override
     protected void initEventAndData() {
+    }
+
+
+    @Override
+    protected void onVisible() {
+        super.onVisible();
         HttpManager.getInstance().post(new ExampleRequest() {
             @Override
             public void onSucceed(UserBean response) {

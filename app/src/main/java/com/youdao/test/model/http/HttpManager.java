@@ -24,19 +24,19 @@ public class HttpManager {
         return HttpManager.SingletonHolder.INSTANCE;
     }
 
-//    public Flowable rxPost(HttpRequest httpRequest) {
-//        return mHttpClient.rxPost(httpRequest);
-//    }
+    public Flowable rxPost(HttpRequest httpRequest) {
+        return mHttpClient.rxPost(httpRequest);
+    }
 
     public void post(HttpRequest httpRequest) {
         mHttpClient.post(httpRequest);
     }
 
-//    public Flowable rxGet(HttpRequest httpRequest) {
-//        return mHttpClient.rxGet(httpRequest);
-//    }
-//
-//    public void get(HttpRequest httpRequest) {
-//        mHttpClient.get(httpRequest);
-//    }
+    public Flowable rxGet(HttpRequest httpRequest) {
+        return mHttpClient.rxGet(httpRequest);
+    }
+
+    public void get(HttpRequest httpRequest) {
+        mHttpClient.get(httpRequest);
+    }
 }

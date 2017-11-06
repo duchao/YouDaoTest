@@ -19,7 +19,9 @@ import retrofit2.http.QueryMap;
 
 public interface BaseApiService {
 
-    // 这里encode 必须设置为true 否则\会被编码
+    public static final String BASE_URL = "http://note.youdao.com";
+
+    // 这里encode 必须设置为true 否则会被编码
     @GET("{path}")
     Flowable<ResponseBody> get(
             @Path(value = "path", encoded = true) String url,
@@ -29,7 +31,6 @@ public interface BaseApiService {
     @POST("{path}")
     Flowable<ResponseBody> post(
             @Path(value = "path", encoded = true) String url,
-            //  @Header("") String authorization,
             @QueryMap Map<String, String> maps);
 
 
