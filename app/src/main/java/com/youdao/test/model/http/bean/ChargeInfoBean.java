@@ -9,7 +9,7 @@ import java.util.List;
  * Created by duchao on 2017/11/6.
  */
 
-public class StubBean {
+public class ChargeInfoBean {
 
     @SerializedName("charge_info")
     private List<ChargeBean> mChargeList;

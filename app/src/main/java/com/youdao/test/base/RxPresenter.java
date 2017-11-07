@@ -1,5 +1,6 @@
 package com.youdao.test.base;
 
+import io.reactivex.Flowable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -22,6 +23,7 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T>  {
     protected void unSubscribe() {
         if (mCompositeDisposable != null) {
             mCompositeDisposable.dispose();
+            mCompositeDisposable = null;
         }
     }
     @Override

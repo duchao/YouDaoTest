@@ -58,7 +58,7 @@ public abstract class BaseFragment extends LazyFragment {
     }
 
     protected void intent2Activity(Class<? extends Activity> tarActivity) {
-        Intent intent = new Intent(mContext, tarActivity);
+        Intent intent = new Intent(mActivity, tarActivity);
         startActivity(intent);
     }
 }

@@ -1,6 +1,6 @@
 package com.youdao.test.model.http.request;
 
-import com.youdao.test.model.http.bean.StubBean;
+import com.youdao.test.model.http.bean.ChargeInfoBean;
 
 import java.util.Map;
 
@@ -8,7 +8,9 @@ import java.util.Map;
  * Created by duchao on 2017/11/6.
  */
 
-public class QicaiRequest extends HttpRequest<StubBean> {
+public class ChargeInfoRequest extends HttpRequest<ChargeInfoBean> {
+
+    // 用抓包工具抓的包
     @Override
     protected Map initParams(Map<String, String> map) {
         map.put("term_id", "1101081071");
@@ -18,13 +20,15 @@ public class QicaiRequest extends HttpRequest<StubBean> {
         return map;
     }
 
+    // 请求的URL
     @Override
     protected String initUrl() {
         return "ichargeservice/rest/ChargePileWebc/1.0/F103";
     }
 
+    // 这个地方必须返回对应的Class
     @Override
     public Class<?> getBeanClass() {
-        return StubBean.class;
+        return ChargeInfoBean.class;
     }
 }
