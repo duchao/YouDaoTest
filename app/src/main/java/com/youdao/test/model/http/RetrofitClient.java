@@ -2,7 +2,9 @@ package com.youdao.test.model.http;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.youdao.test.BuildConfig;
+import com.youdao.test.model.http.request.HttpRequest;
 import com.youdao.test.utils.RxUtils;
 
 import org.json.JSONObject;
@@ -14,6 +16,7 @@ import io.reactivex.FlowableTransformer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.*;
@@ -72,6 +75,16 @@ public class RetrofitClient {
         builder.connectTimeout(10, TimeUnit.SECONDS);
         builder.readTimeout(20, TimeUnit.SECONDS);
         builder.writeTimeout(20, TimeUnit.SECONDS);
+//
+//        Map<String, String> headerMap = new HashMap<>();
+//        headerMap.put("Content-Type", "application/json");
+//        headerMap.put("Accept", "application/json");
+//        headerMap.put("Accept-Encoding", "gzip");
+//        headerMap.put("Accept-Language", "zh-CN");
+//        headerMap.put("Connection", "keep-alive");
+//
+//        BaseInterceptor header = new BaseInterceptor(headerMap);
+//        builder.addInterceptor(header);
 
         // 错误重连
         builder.retryOnConnectionFailure(true);
@@ -104,6 +117,14 @@ public class RetrofitClient {
                 .compose(handleResult());
     }
 
+    public void json(HttpRequest httpRequest) {
+        RequestBody jsonbody = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(httpRequest.getParams()));
+        mApiService.json(httpRequest.getUrl(), jsonbody)
+                .compose(RxUtils.rxScheduler())
+                .compose(handleResult())
+                .subscribe(httpRequest);
+    }
+
 
     public FlowableTransformer<ResponseBody, String> handleResult() {
         return new FlowableTransformer<ResponseBody, String>() {
@@ -128,6 +149,7 @@ public class RetrofitClient {
     // 由于泛型擦除，retrofit只能统一返回responsebody的数据，在这里做处理，然后返回字符串。
     // 另外确保是规范的数据，如果不是规范数据，会直接返回整个字符串
     private static String handleResponseBody(ResponseBody responseBody) throws Exception {
+
         String data = "";
         String responseStr = responseBody.string();
         int code = -1;

@@ -1,4 +1,4 @@
-package com.youdao.test.model.bean;
+package com.youdao.test.model.http.bean;
 
 import com.google.gson.annotations.SerializedName;
 

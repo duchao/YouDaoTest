@@ -31,10 +31,10 @@ public class RxUtils {
         }, BackpressureStrategy.BUFFER);
     }
 
-    public static <T> FlowableTransformer<T, T> rxScheduler() {
-       return new FlowableTransformer<T, T>() {
+    public static FlowableTransformer rxScheduler() {
+       return new FlowableTransformer() {
            @Override
-           public Publisher<T> apply(@NonNull Flowable<T> upstream) {
+           public Publisher apply(@NonNull Flowable upstream) {
                return upstream.subscribeOn(Schedulers.io())
                        .observeOn(AndroidSchedulers.mainThread());           }
        };

@@ -1,4 +1,4 @@
-package com.youdao.test.model.http;
+package com.youdao.test.model.http.request;
 
 import com.google.gson.Gson;
 
@@ -68,12 +68,18 @@ public abstract class HttpRequest<T> extends DisposableSubscriber<String> {
 
     }
 
+    protected T handleResponse(String response) {
+        return null;
+    }
+
     private T transformData(String dataStr) {
         T data = null;
         Gson gson = new Gson();
         Class<?> beanClass = getBeanClass();
         if (beanClass != null) {
             data = (T) gson.fromJson(dataStr, getBeanClass());
+        } else {
+            data = handleResponse(dataStr);
         }
         return data;
     }

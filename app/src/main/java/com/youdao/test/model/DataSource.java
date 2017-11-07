@@ -1,7 +1,6 @@
 package com.youdao.test.model;
 
 import com.youdao.test.model.http.HttpManager;
-import com.youdao.test.model.http.HttpRequest;
 
 /**
  * Created by duchao on 2017/10/23.

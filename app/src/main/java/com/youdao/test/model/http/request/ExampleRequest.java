@@ -1,6 +1,6 @@
-package com.youdao.test.model.http;
+package com.youdao.test.model.http.request;
 
-import com.youdao.test.model.bean.UserBean;
+import com.youdao.test.model.http.bean.UserBean;
 
 import java.util.Map;
 
@@ -28,6 +28,5 @@ public class ExampleRequest extends HttpRequest<UserBean> {
     public Class<?> getBeanClass() {
         return UserBean.class;
     }
-
 
 }

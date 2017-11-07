@@ -1,5 +1,7 @@
 package com.youdao.test.model.http;
 
+import com.youdao.test.model.http.request.HttpRequest;
+
 import io.reactivex.Flowable;
 
 /**
@@ -38,5 +40,9 @@ public class HttpManager {
 
     public void get(HttpRequest httpRequest) {
         mHttpClient.get(httpRequest);
+    }
+
+    public void json(HttpRequest httpRequest) {
+        mHttpClient.json(httpRequest);
     }
 }

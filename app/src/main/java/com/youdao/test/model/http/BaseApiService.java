@@ -1,13 +1,14 @@
 package com.youdao.test.model.http;
 
-import com.youdao.test.model.bean.UserBean;
 
-import java.net.URLEncoder;
 import java.util.Map;
 
 import io.reactivex.Flowable;
-import okhttp3.Response;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.http.Body;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -19,7 +20,7 @@ import retrofit2.http.QueryMap;
 
 public interface BaseApiService {
 
-    public static final String BASE_URL = "http://note.youdao.com";
+    public static final String BASE_URL = "http://223.112.89.148:18082";
 
     // 这里encode 必须设置为true 否则会被编码
     @GET("{path}")
@@ -28,17 +29,18 @@ public interface BaseApiService {
             @QueryMap Map<String, String> maps
     );
 
+    @FormUrlEncoded
     @POST("{path}")
     Flowable<ResponseBody> post(
             @Path(value = "path", encoded = true) String url,
-            @QueryMap Map<String, String> maps);
+            @FieldMap Map<String, String> maps);
 
 
 
-//    @POST("{url}")
-//    Flowable<BaseResponse> json(
-//            @Path("url") String url,
-//            @Body RequestBody jsonStr);
+    @POST("{path}")
+    Flowable<ResponseBody> json(
+            @Path(value = "path", encoded = true) String url,
+            @Body RequestBody jsonStr);
 
 //    @Multipart
 //    @POST("{url}")
