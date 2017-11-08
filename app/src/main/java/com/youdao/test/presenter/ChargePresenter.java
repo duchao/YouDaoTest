@@ -2,6 +2,7 @@ package com.youdao.test.presenter;
 
 import android.content.Context;
 import android.os.Vibrator;
+import android.text.TextUtils;
 
 import com.youdao.test.R;
 import com.youdao.test.base.RxPresenter;
@@ -9,6 +10,7 @@ import com.youdao.test.model.http.HttpManager;
 import com.youdao.test.model.http.bean.ChargeBean;
 import com.youdao.test.model.http.bean.ChargeInfoBean;
 import com.youdao.test.model.http.bean.GunBean;
+import com.youdao.test.model.http.request.ChargeBookRequest;
 import com.youdao.test.model.http.request.ChargeInfoRequest;
 import com.youdao.test.presenter.contract.ChargeContract;
 import com.youdao.test.utils.LogUtils;
@@ -30,7 +32,7 @@ public class ChargePresenter extends RxPresenter<ChargeContract.View> implements
 
     public static final int GUN_STATE_CHARGED = 0;
 
-    public static final int GUN_STATE_SERVED = 1;
+    public static final int GUN_STATE_BOOK = 1;
 
     public static final int GUN_STATE_FREE = 2;
 
@@ -46,6 +48,10 @@ public class ChargePresenter extends RxPresenter<ChargeContract.View> implements
 
     public static final int CONFIG_ALL_CHARGE = 2;
 
+    public static final int BOOK_MODE_MANAUL = 1;
+
+    public static final int BOOK_MODE_AUTO = 2;
+
     private int mConfig = CONFIG_ALL_CHARGE;
 
     private int mTotalRefreshCount = 0;
@@ -55,6 +61,12 @@ public class ChargePresenter extends RxPresenter<ChargeContract.View> implements
     private Disposable mStartRefreshSubscription;
 
     private Vibrator mVibrator;
+
+    private int mBookMode = BOOK_MODE_MANAUL;
+
+    private List<ChargeBean> mFreeChargeList;
+
+    private boolean mBookSuccess = false;
 
     public ChargePresenter(Context context) {
         mContext = context;
@@ -67,23 +79,46 @@ public class ChargePresenter extends RxPresenter<ChargeContract.View> implements
 
     @Override
     public void startRefresh() {
-        if (mStartRefreshSubscription == null) {
-            mStartRefreshSubscription = Flowable.interval(1, TimeUnit.SECONDS).subscribe(new Consumer<Long>() {
-                @Override
-                public void accept(Long aLong) throws Exception {
-                    requestChargeInfo();
-                }
-            });
-            addSubscribe(mStartRefreshSubscription);
-        }
+        mStartRefreshSubscription = Flowable.interval(1, TimeUnit.SECONDS).subscribe(new Consumer<Long>() {
+            @Override
+            public void accept(Long aLong) throws Exception {
+                requestChargeInfo();
+            }
+        });
+        addSubscribe(mStartRefreshSubscription);
     }
 
     @Override
     public void stopRefresh() {
-        mStartRefreshSubscription.dispose();
-        mStartRefreshSubscription = null;
-        mVibrator.cancel();
-        mVibrator = null;
+        if (mStartRefreshSubscription != null) {
+            mStartRefreshSubscription.dispose();
+        }
+        stopVibrator();
+    }
+
+    private void startVibrator() {
+        if (mVibrator == null) {
+            mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        }
+        if (mVibrator != null) {
+            if (mVibrator.hasVibrator()) {
+                mVibrator.cancel();
+            }
+            long[] pattern = {100, 400, 100, 400}; // 停止 开启 停止 开启
+            mVibrator.vibrate(pattern, 2); //重复两次上面的pattern 如果只想震动一次，index设为-1
+        }
+    }
+
+    private void stopVibrator() {
+        if (mVibrator != null && mVibrator.hasVibrator()) {
+            mVibrator.cancel();
+            mVibrator = null;
+        }
+    }
+
+    @Override
+    public void udpateBookMode(int bookMode) {
+        mBookMode = bookMode;
     }
 
     public void requestChargeInfo() {
@@ -92,24 +127,43 @@ public class ChargePresenter extends RxPresenter<ChargeContract.View> implements
             protected void onStart() {
                 super.onStart();
                 mTotalRefreshCount++;
-                mVibrator = (Vibrator)mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                mBookSuccess = false;
             }
 
             @Override
             public void onSucceed(ChargeInfoBean response) {
-                handleChargeInfo(response);
+                String chargeInfo = handleChargeInfo(response);
+                mView.updateChargeInfo(chargeInfo);
             }
 
             @Override
             public void onFailed(Throwable t) {
                 LogUtils.e("ChargePresenter", t.toString());
             }
+
+            @Override
+            public void onComplete() {
+                if (mFreeChargeList != null && mFreeChargeList.size() > 0) {
+                    stopRefresh();
+                    if (mBookMode == BOOK_MODE_MANAUL) {
+                        // 开始震动
+                        startVibrator();
+                    } else if (mBookMode == BOOK_MODE_AUTO) {
+                        // 开始预约
+                        if (!mBookSuccess) {
+                            bookeCharge(mFreeChargeList.get(0));
+                        }
+                    }
+                } else {
+                    stopVibrator();
+                }
+            }
         });
     }
 
-    private void handleChargeInfo(ChargeInfoBean chargeInfo) {
+    private String handleChargeInfo(ChargeInfoBean chargeInfo) {
         if (chargeInfo == null || chargeInfo.getChargeList() == null) {
-            return;
+            return "";
         }
         List<ChargeBean> freeAcCharge = new ArrayList<ChargeBean>();
         List<ChargeBean> freeDcCharge = new ArrayList<ChargeBean>();
@@ -143,7 +197,7 @@ public class ChargePresenter extends RxPresenter<ChargeContract.View> implements
         } else if (mConfig == CONFIG_DC_CHARGE) {
             sb.append(handleCharge(freeDcCharge));
         }
-        mView.updateChargeInfo(sb.toString());
+        return sb.toString();
     }
 
     private String handleCharge(List<ChargeBean> chargeList) {
@@ -156,27 +210,43 @@ public class ChargePresenter extends RxPresenter<ChargeContract.View> implements
             chargeInfo = mContext.getString(R.string.charge_no_free_charge);
         } else if (size > 0) {
             StringBuilder sb = new StringBuilder();
+            if (mFreeChargeList != null) {
+                mFreeChargeList.clear();
+            }
             for (int i = 0; i < size; i++) {
-                sb.append(chargeList.get(i).getChargeName());
-                if ( i < size - 1) {
+                ChargeBean chargeBean = chargeList.get(i);
+                sb.append(chargeBean.getChargeName());
+                if (i < size - 1) {
                     sb.append(",");
                 }
+                if (mFreeChargeList == null) {
+                    mFreeChargeList = new ArrayList<ChargeBean>();
+                }
+                mFreeChargeList.add(chargeBean);
             }
             chargeInfo = mContext.getString(R.string.charge_free_charges, sb.toString());
-            if (mVibrator != null) {
-                long [] pattern = {100,400,100,400}; // 停止 开启 停止 开启
-                mVibrator.vibrate(pattern,2); //重复两次上面的pattern 如果只想震动一次，index设为-1
-            }
         }
         return chargeInfo;
     }
 
-    @Override
-    public void detachView() {
-        super.detachView();
-        if (mVibrator != null && mVibrator.hasVibrator()) {
-            mVibrator.cancel();
-            mVibrator = null;
+    private void bookeCharge(final ChargeBean chargeBean) {
+        if (chargeBean == null) {
+            return;
         }
+        HttpManager.getInstance().json(new ChargeBookRequest(chargeBean.getGunList().get(0).getGunNum(), chargeBean.getChargeId()) {
+
+            @Override
+            public void onSucceed(Object response) {
+                mBookSuccess = true;
+                mView.updateChargeInfo(chargeBean.getChargeName() + mContext.getString(R.string.charge_book_success));
+                startVibrator();
+            }
+
+            @Override
+            public void onFailed(Throwable t) {
+                mView.updateChargeInfo(mContext.getString(R.string.charge_book_failed));
+            }
+        });
     }
+
 }

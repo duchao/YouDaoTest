@@ -15,5 +15,10 @@
     <string name="charge_all_charge_stub">快充+慢充</string>
     <string name="charge_ac_charge_stub">慢充</string>
     <string name="charge_dc_charge_stub">快充</string>
+    <string name="charge_info_hit">选择充电桩类型，点击开始刷新，获取充电桩信息</string>
+    <string name="charge_manual_book">手动预约</string>
+    <string name="charge_auto_book">自动预约</string>
+    <string name="charge_book_success">预约成功</string>
+    <string name="charge_book_failed">预约失败</string>
 
 </resources>

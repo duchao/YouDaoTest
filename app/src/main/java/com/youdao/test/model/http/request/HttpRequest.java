@@ -11,7 +11,7 @@ import io.reactivex.subscribers.DisposableSubscriber;
  * Created by duchao on 2017/10/23.
  */
 
-public abstract class HttpRequest<T> extends DisposableSubscriber<String> {
+public abstract class HttpRequest<T> extends DisposableSubscriber<T> {
 
     private String mUrl;
 
@@ -46,8 +46,7 @@ public abstract class HttpRequest<T> extends DisposableSubscriber<String> {
     }
 
     @Override
-    public void onNext(String dataStr) {
-        T data = transformData(dataStr);
+    public void onNext(T data) {
         onSucceed(data);
     }
 
@@ -72,14 +71,29 @@ public abstract class HttpRequest<T> extends DisposableSubscriber<String> {
         return null;
     }
 
-    private T transformData(String dataStr) {
+//    private T transformData(String dataStr) {
+//        T data = null;
+//        Gson gson = new Gson();
+//        Class<?> beanClass = getBeanClass();
+//        if (beanClass != null) {
+//            data = (T) gson.fromJson(dataStr, getBeanClass());
+//        } else {
+//            data = handleResponse(dataStr);
+//        }
+//        return data;
+//    }
+
+    public T transformData(String response) {
+        if (response == null) {
+            return null;
+        }
         T data = null;
         Gson gson = new Gson();
         Class<?> beanClass = getBeanClass();
         if (beanClass != null) {
-            data = (T) gson.fromJson(dataStr, getBeanClass());
+            data = (T) gson.fromJson(response, getBeanClass());
         } else {
-            data = handleResponse(dataStr);
+            data = handleResponse(response);
         }
         return data;
     }

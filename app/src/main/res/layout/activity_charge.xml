@@ -12,6 +12,7 @@
         android:id="@+id/tv_charge_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/charge_info_hit"
         android:layout_below="@id/view_toolbar" />
 
     <RadioGroup
@@ -35,6 +36,24 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="@string/charge_all_charge_stub"/>
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rg_charge_book"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/rb_charge_manual_book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/charge_manual_book"/>
+        <RadioButton
+            android:id="@+id/rb_charge_auto_book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/charge_auto_book"/>
     </RadioGroup>
 
     <LinearLayout

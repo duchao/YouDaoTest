@@ -19,6 +19,9 @@ public class ChargeBean {
     @SerializedName("term_name")
     private String mChargeName;
 
+    @SerializedName("term_id")
+    private String mChargeId;
+
     public List<GunBean> getGunList() {
         return mGunList;
     }
@@ -41,5 +44,13 @@ public class ChargeBean {
 
     public void setChargeName(String chargeName) {
         mChargeName = chargeName;
+    }
+
+    public String getChargeId() {
+        return mChargeId;
+    }
+
+    public void setmChargeId(String chargeId) {
+        mChargeId = chargeId;
     }
 }

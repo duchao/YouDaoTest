@@ -35,6 +35,9 @@ public class ChargeActivity extends BaseMvpActivity<ChargePresenter> implements 
     @BindView(R.id.btn_stop_refresh)
     Button mStopRefresh;
 
+    @BindView(R.id.rg_charge_book)
+    RadioGroup mChargeBookMode;
+
     @Override
     protected ChargePresenter initPresenter() {
         return new ChargePresenter(this);
@@ -65,6 +68,21 @@ public class ChargeActivity extends BaseMvpActivity<ChargePresenter> implements 
                         break;
                 }
 
+            }
+        });
+        mChargeBookMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int checkId) {
+                switch (checkId) {
+                    case R.id.rb_charge_manual_book:
+                        mPresenter.udpateBookMode(ChargePresenter.BOOK_MODE_MANAUL);
+                        break;
+                    case R.id.rb_charge_auto_book:
+                        mPresenter.udpateBookMode(ChargePresenter.BOOK_MODE_AUTO);
+                        break;
+                    default:
+                        break;
+                }
             }
         });
         mStartRefresh.setEnabled(true);

@@ -18,5 +18,6 @@ public interface ChargeContract {
         public void updateConfigInfo(int config);
         public void startRefresh();
         public void stopRefresh();
+        public void udpateBookMode(int bookMode);
     }
 }
