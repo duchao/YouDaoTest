@@ -1,5 +1,6 @@
 package com.youdao.test.model.http.request;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -8,23 +9,19 @@ import java.util.Map;
 
 public class ChargeBookRequest extends HttpRequest<Object> {
 
-    private String mGunId;
-
-    private String mChargeId;
-
-    @Override
-    protected Map initParams(Map<String, String> map) {
-        map.put("custom_no", "1000031393");
-        map.put("timestamp", "1510069771841");
-        map.put("key", "84AD64505FFA195730D7261ABB9D79C8");
-        map.put("gun_id", "1294");
-        map.put("term_id", "1101081071101280");
-        return map;
+    public ChargeBookRequest(String gunId, String chargeId) {
+        mParams = initParams(gunId, chargeId);
     }
 
-    public ChargeBookRequest(String gunId, String chargeId) {
-        mGunId = gunId;
-        mChargeId = chargeId;
+    @Override
+    protected Map initParams(String... params) {
+        Map<String, String> map = new HashMap<>();
+        map.put("custom_no", "1000031393");
+        map.put("timestamp", "1509970276665");
+        map.put("key", "146FF5DCC4FA2AE2854A7BF9999F1437");
+        map.put("gun_id", params[0]);
+        map.put("term_id", params[1]);
+        return map;
     }
 
     @Override

@@ -11,7 +11,10 @@
     <TextView
         android:id="@+id/tv_charge_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="@color/red"
         android:hint="@string/charge_info_hit"
         android:layout_below="@id/view_toolbar" />
 

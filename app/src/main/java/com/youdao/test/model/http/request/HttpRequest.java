@@ -15,15 +15,10 @@ public abstract class HttpRequest<T> extends DisposableSubscriber<T> {
 
     private String mUrl;
 
-    private Map<String, String> mParams;
-
-    private HttpRequest(Map<String, String> params) {
-        mUrl = initUrl();
-        mParams = initParams(params);
-    }
+    protected Map<String, String> mParams;
 
     public HttpRequest() {
-        this(new HashMap<String, String>());
+        mUrl = initUrl();
     }
 
     public String getUrl() {
@@ -34,7 +29,11 @@ public abstract class HttpRequest<T> extends DisposableSubscriber<T> {
         return mParams;
     }
 
-    protected abstract Map initParams(Map<String, String> map);
+    public void setParams(Map<String, String> params) {
+        mParams = params;
+    }
+
+    protected abstract Map initParams(String... params);
 
     protected abstract String initUrl();
 

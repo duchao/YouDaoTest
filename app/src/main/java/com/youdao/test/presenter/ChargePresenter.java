@@ -2,8 +2,6 @@ package com.youdao.test.presenter;
 
 import android.content.Context;
 import android.os.Vibrator;
-import android.text.TextUtils;
-
 import com.youdao.test.R;
 import com.youdao.test.base.RxPresenter;
 import com.youdao.test.model.http.HttpManager;
@@ -206,13 +204,14 @@ public class ChargePresenter extends RxPresenter<ChargeContract.View> implements
             return chargeInfo;
         }
         int size = chargeList.size();
+        if (mFreeChargeList != null) {
+            mFreeChargeList.clear();
+        }
         if (size == 0) {
             chargeInfo = mContext.getString(R.string.charge_no_free_charge);
         } else if (size > 0) {
             StringBuilder sb = new StringBuilder();
-            if (mFreeChargeList != null) {
-                mFreeChargeList.clear();
-            }
+
             for (int i = 0; i < size; i++) {
                 ChargeBean chargeBean = chargeList.get(i);
                 sb.append(chargeBean.getChargeName());

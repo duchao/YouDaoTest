@@ -2,6 +2,7 @@ package com.youdao.test.model.http.request;
 
 import com.youdao.test.model.http.bean.ChargeInfoBean;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -10,9 +11,13 @@ import java.util.Map;
 
 public class ChargeInfoRequest extends HttpRequest<ChargeInfoBean> {
 
-    // 用抓包工具抓的包
+    public ChargeInfoRequest() {
+        mParams = initParams();
+    }
+
     @Override
-    protected Map initParams(Map<String, String> map) {
+    protected Map initParams(String... params) {
+        Map<String, String> map = new HashMap<>();
         map.put("term_id", "1101081071");
         map.put("key", "146FF5DCC4FA2AE2854A7BF9999F1437");
         map.put("custom_no", "1000031393");

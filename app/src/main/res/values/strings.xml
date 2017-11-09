@@ -11,7 +11,7 @@
     <string name="charge_stop_refresh">停止刷新</string>
     <string name="charge_refreshing">正在进行第%d次刷新</string>
     <string name="charge_no_free_charge">当前没有空余充电桩</string>
-    <string name="charge_free_charges">当前可以预约%s</string>
+    <string name="charge_free_charges">当前可以预约:\n%s</string>
     <string name="charge_all_charge_stub">快充+慢充</string>
     <string name="charge_ac_charge_stub">慢充</string>
     <string name="charge_dc_charge_stub">快充</string>
@@ -20,5 +20,6 @@
     <string name="charge_auto_book">自动预约</string>
     <string name="charge_book_success">预约成功</string>
     <string name="charge_book_failed">预约失败</string>
+    <string name="charge_auto_not_open">自动预约暂未开放</string>
 
 </resources>

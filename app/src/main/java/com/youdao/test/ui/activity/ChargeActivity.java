@@ -10,6 +10,7 @@ import com.youdao.test.R;
 import com.youdao.test.base.BaseMvpActivity;
 import com.youdao.test.presenter.ChargePresenter;
 import com.youdao.test.presenter.contract.ChargeContract;
+import com.youdao.test.utils.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -78,7 +79,9 @@ public class ChargeActivity extends BaseMvpActivity<ChargePresenter> implements 
                         mPresenter.udpateBookMode(ChargePresenter.BOOK_MODE_MANAUL);
                         break;
                     case R.id.rb_charge_auto_book:
-                        mPresenter.udpateBookMode(ChargePresenter.BOOK_MODE_AUTO);
+                        ToastUtils.showToast(mContext, R.string.charge_auto_not_open);
+                        mChargeBookMode.check(R.id.rb_charge_manual_book);
+//                        mPresenter.udpateBookMode(ChargePresenter.BOOK_MODE_AUTO);
                         break;
                     default:
                         break;
